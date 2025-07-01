@@ -55,7 +55,7 @@ export default function NewResearchPage() {
     setSources(newSources)
   }
 
-  const useTemplate = (template: typeof templates[0]) => {
+  const handleUseTemplate = (template: typeof templates[0]) => {
     setSelectedTemplate(template.id)
     setQuery(template.example)
   }
@@ -140,7 +140,7 @@ export default function NewResearchPage() {
                       ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900' 
                       : ''
                   }`}
-                  onClick={() => useTemplate(template)}
+                  onClick={() => handleUseTemplate(template)}
                 >
                   <CardHeader className="pb-3">
                     <div className="flex items-center">
@@ -151,7 +151,7 @@ export default function NewResearchPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-gray-500 italic">
-                      "{template.example}"
+                      &ldquo;{template.example}&rdquo;
                     </p>
                   </CardContent>
                 </Card>
@@ -184,7 +184,7 @@ export default function NewResearchPage() {
                     required
                   />
                   <p className="mt-1 text-sm text-gray-500">
-                    Examples: "AI trends in healthcare 2024", "Tesla market position analysis", "Remote work productivity statistics"
+                    Examples: &ldquo;AI trends in healthcare 2024&rdquo;, &ldquo;Tesla market position analysis&rdquo;, &ldquo;Remote work productivity statistics&rdquo;
                   </p>
                 </div>
 
