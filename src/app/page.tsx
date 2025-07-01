@@ -45,6 +45,11 @@ export default function HomePage() {
                 View Demo
               </Button>
             </Link>
+            <Link href="/de-score">
+              <Button size="lg" variant="secondary" className="px-8">
+                Try Now
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
