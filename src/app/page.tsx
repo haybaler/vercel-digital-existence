@@ -8,7 +8,7 @@ export default function HomePage() {
     <div className="flex flex-col min-h-screen">
       {/* Header */}
       <header className="border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row md:justify-between items-center space-y-4 md:space-y-0">
           <div className="flex items-center space-x-2">
             <Zap className="h-8 w-8 text-blue-600" />
             <h1 className="text-2xl font-bold">Digital Existence</h1>
@@ -43,6 +43,11 @@ export default function HomePage() {
             <Link href="/demo">
               <Button size="lg" variant="outline" className="px-8">
                 View Demo
+              </Button>
+            </Link>
+            <Link href="/de-score">
+              <Button size="lg" variant="secondary" className="px-8">
+                Try Now
               </Button>
             </Link>
           </div>
