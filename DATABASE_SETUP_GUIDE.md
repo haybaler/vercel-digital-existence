@@ -1,6 +1,12 @@
-# Database Setup Guide
+# Storage Setup Guide
 
-## 🗄️ Creating Vercel Postgres Database
+## 🗄️ Vercel Storage Components
+
+This platform uses two storage types:
+- **Postgres Database**: User data, research sessions, trends metadata  
+- **Blob Storage**: Research reports, generated content, file uploads
+
+## Creating Vercel Postgres Database
 
 Since Vercel CLI doesn't directly support creating Postgres databases, you need to use the Vercel Dashboard:
 
@@ -14,11 +20,19 @@ Since Vercel CLI doesn't directly support creating Postgres databases, you need 
 7. Region: Choose closest to your users
 8. Click **Create**
 
-### Step 2: Get Connection Strings
-After database creation:
+### Step 2: Create Blob Storage
+1. In the same **Storage** tab, click **Create Database** again
+2. Select **Blob**  
+3. Name: `digital-existence-blob`
+4. Click **Create**
+
+### Step 3: Get Connection Strings
+After both databases are created:
 1. Go to **Settings** → **Environment Variables**
 2. You should see these auto-added:
-   ```
+
+   ```bash
+   # Postgres
    POSTGRES_DATABASE
    POSTGRES_HOST
    POSTGRES_PASSWORD
@@ -26,15 +40,18 @@ After database creation:
    POSTGRES_URL
    POSTGRES_URL_NON_POOLING
    POSTGRES_USER
+   
+   # Blob Storage
+   BLOB_READ_WRITE_TOKEN
    ```
 
-### Step 3: Update Local Environment
+### Step 4: Update Local Environment
 ```bash
 # Pull the latest environment variables
 vercel env pull .env.local
 ```
 
-### Step 4: Run Database Migration
+### Step 5: Run Database Migration
 ```bash
 # Generate Prisma client
 npm run db:generate
@@ -46,7 +63,7 @@ npm run db:push
 npm run db:studio
 ```
 
-### Step 5: Verify Database Setup
+### Step 6: Verify Storage Setup
 ```bash
 # Test database connection
 node -e "
@@ -56,6 +73,14 @@ prisma.\$connect()
   .then(() => console('✅ Database connected successfully'))
   .catch(err => console.error('❌ Database connection failed:', err))
   .finally(() => prisma.\$disconnect());
+"
+
+# Test blob storage
+node -e "
+const { put } = require('@vercel/blob');
+put('test.txt', 'Hello Blob!', { access: 'public' })
+  .then(() => console('✅ Blob storage working'))
+  .catch(err => console.error('❌ Blob storage failed:', err));
 "
 ```
 
