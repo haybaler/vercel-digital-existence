@@ -4,7 +4,6 @@ export interface BlobUploadResult {
   url: string
   pathname: string
   contentType?: string
-  contentDisposition?: string
 }
 
 // Research report storage
@@ -25,8 +24,7 @@ export async function saveResearchReport(
   return {
     url: blob.url,
     pathname: blob.pathname,
-    contentType: blob.contentType,
-    contentDisposition: blob.contentDisposition
+    contentType: blob.contentType
   }
 }
 
@@ -115,8 +113,7 @@ export async function exportResearchAsZip(
   
   const blob = await put(filename, JSON.stringify(exportData, null, 2), {
     access: 'public',
-    contentType: 'application/json',
-    contentDisposition: `attachment; filename="research-${sessionId}.json"`
+    contentType: 'application/json'
   })
   
   return blob
