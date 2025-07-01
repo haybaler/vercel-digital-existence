@@ -4,12 +4,13 @@ echo "🚀 Digital Existence Platform - Storage Setup"
 echo "=============================================="
 
 # Check if environment variables are set
-if [ -z "$POSTGRES_URL" ]; then
-    echo "❌ POSTGRES_URL not set. Please create Vercel Postgres database first."
+if [ -z "$POSTGRES_PRISMA_URL" ] && [ -z "$DATABASE_URL" ]; then
+    echo "❌ Database URL not set. Please create Neon Postgres database first."
     echo "   1. Go to Vercel Dashboard > Your Project > Storage"
-    echo "   2. Create Postgres Database"
-    echo "   3. Create Blob Storage"
-    echo "   4. Run: vercel env pull .env.local"
+    echo "   2. Browse Marketplace > Select Neon"
+    echo "   3. Create Postgres Database"
+    echo "   4. Create Blob Storage"
+    echo "   5. Run: vercel env pull .env.local"
     exit 1
 fi
 

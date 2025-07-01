@@ -6,19 +6,20 @@ This platform uses two storage types:
 - **Postgres Database**: User data, research sessions, trends metadata  
 - **Blob Storage**: Research reports, generated content, file uploads
 
-## Creating Vercel Postgres Database
+## Creating Neon Postgres Database
 
-Since Vercel CLI doesn't directly support creating Postgres databases, you need to use the Vercel Dashboard:
+**Recommended**: Use Neon for serverless Postgres with zero cold starts.
 
-### Step 1: Create Database via Dashboard
+### Step 1: Create Neon Database
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
 2. Navigate to your project: `vercel-digital-existence`
 3. Click on **Storage** tab
-4. Click **Create Database**
-5. Select **Postgres**
-6. Name: `digital-existence-db`
-7. Region: Choose closest to your users
-8. Click **Create**
+4. Click **Browse Marketplace**
+5. Select **Neon - Serverless Postgres**
+6. Click **Add Integration**
+7. Name: `digital-existence-db`
+8. Region: Choose closest to your users
+9. Click **Create Database**
 
 ### Step 2: Create Blob Storage
 1. In the same **Storage** tab, click **Create Database** again
@@ -32,14 +33,10 @@ After both databases are created:
 2. You should see these auto-added:
 
    ```bash
-   # Postgres
-   POSTGRES_DATABASE
-   POSTGRES_HOST
-   POSTGRES_PASSWORD
+   # Neon Postgres
+   DATABASE_URL
    POSTGRES_PRISMA_URL
-   POSTGRES_URL
    POSTGRES_URL_NON_POOLING
-   POSTGRES_USER
    
    # Blob Storage
    BLOB_READ_WRITE_TOKEN
@@ -98,8 +95,8 @@ chmod +x scripts/setup-database.sh
 
 ## 🚨 Troubleshooting
 
-**Problem**: `POSTGRES_URL` not found
-- **Solution**: Make sure you've created the database in Vercel Dashboard and pulled env vars
+**Problem**: `DATABASE_URL` not found
+- **Solution**: Make sure you've created the Neon database in Vercel Dashboard and pulled env vars
 
 **Problem**: Schema push fails
 - **Solution**: Check your database connection string format
