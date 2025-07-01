@@ -27,7 +27,7 @@ export interface FirecrawlCrawlOptions {
   limit?: number
   scrapeOptions?: FirecrawlScrapeOptions
   allowBackwardLinks?: boolean
-  allowExternalContentLinks?: boolean
+  allowExternalLinks?: boolean
 }
 
 export interface ScrapeResult {
@@ -113,7 +113,7 @@ export async function crawlWebsite(
         ...options.scrapeOptions
       },
       allowBackwardLinks: options.allowBackwardLinks ?? false,
-      allowExternalContentLinks: options.allowExternalContentLinks ?? false
+      allowExternalLinks: options.allowExternalLinks ?? false
     })
     
     return {
