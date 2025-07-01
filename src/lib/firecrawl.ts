@@ -150,7 +150,11 @@ export async function extractData<T>(
       }
     })
     
-    return result.llm_extraction as T
+    // Check if result has data and llm_extraction
+    if ('data' in result && result.data && 'llm_extraction' in result.data) {
+      return result.data.llm_extraction as T
+    }
+    throw new Error('Extraction failed: llm_extraction not present')
   } catch (error) {
     console.error('Firecrawl extraction error:', error)
     throw new Error(`Failed to extract data: ${error}`)
