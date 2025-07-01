@@ -68,8 +68,8 @@ export async function generateAIObject<T>(
 
   const structuredPrompt = `${prompt}
 
-Please respond with a valid JSON object that matches this schema:
-${JSON.stringify(schema.describe ? schema.describe() : 'object', null, 2)}
+Please respond with a valid JSON object that matches this schema description.
+Ensure the response is valid JSON format.
 
 Respond only with the JSON object, no additional text.`
 
