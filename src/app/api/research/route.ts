@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { searchWeb, scrapeUrl } from '@/lib/firecrawl'
 import { analyzeResearchData } from '@/lib/ai'
+import { saveResearchReport, saveLargeResearchData } from '@/lib/blob'
 import { z } from 'zod'
 
 const ResearchRequestSchema = z.object({
@@ -83,7 +84,54 @@ export async function POST(request: NextRequest) {
       // Analyze research data with AI
       const analysisResult = await analyzeResearchData(query, webData)
 
-      // Update research session with results
+      // Save comprehensive research data to blob storage
+      const fullResearchData = {
+        query,
+        analysis: analysisResult,
+        sources: webData,
+        metadata: {
+          depth,
+          sourcesCount: webData.length,
+          completedAt: new Date().toISOString()
+        }
+      }
+
+      const blobResult = await saveLargeResearchData(
+        session.user.id,
+        researchSession.id,
+        fullResearchData
+      )
+
+      // Save summary report as markdown
+      const markdownReport = `# Research Report: ${query}
+
+## Summary
+${analysisResult.summary}
+
+## Key Points
+${analysisResult.keyPoints.map(point => `- ${point}`).join('\n')}
+
+## Sources
+${analysisResult.sources.map(source => `- [${source.title}](${source.url}) (Relevance: ${source.relevance}/10)`).join('\n')}
+
+## Insights
+${analysisResult.insights.map(insight => `- ${insight}`).join('\n')}
+
+## Recommendations
+${analysisResult.recommendations.map(rec => `- ${rec}`).join('\n')}
+
+---
+Generated on ${new Date().toISOString()}
+Confidence Level: ${analysisResult.confidence}/10`
+
+      const reportBlob = await saveResearchReport(
+        session.user.id,
+        researchSession.id,
+        markdownReport,
+        'md'
+      )
+
+      // Update research session with results and blob URLs
       const updatedSession = await db.researchSession.update({
         where: { id: researchSession.id },
         data: {
@@ -99,7 +147,11 @@ export async function POST(request: NextRequest) {
             metadata: {
               depth,
               sourcesCount: webData.length,
-              completedAt: new Date().toISOString()
+              completedAt: new Date().toISOString(),
+              blobUrls: {
+                fullData: blobResult.url,
+                report: reportBlob.url
+              }
             }
           }
         }
