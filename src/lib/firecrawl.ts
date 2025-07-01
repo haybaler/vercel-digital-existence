@@ -116,9 +116,17 @@ export async function crawlWebsite(
       allowExternalLinks: options.allowExternalLinks ?? false
     })
     
-    return {
-      success: true,
-      data: result.data as ScrapeResult[]
+    // Check if result has data property (successful response)
+    if ('data' in result && result.data) {
+      return {
+        success: true,
+        data: result.data as ScrapeResult[]
+      }
+    } else {
+      return {
+        success: false,
+        error: 'error' in result ? result.error : 'No data returned from crawl'
+      }
     }
   } catch (error) {
     console.error('Firecrawl crawl error:', error)
