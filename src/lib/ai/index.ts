@@ -1,7 +1,4 @@
-import { openai } from '@ai-sdk/openai'
-import { anthropic } from '@ai-sdk/anthropic'
-import { google } from '@ai-sdk/google'
-import { generateText, generateObject } from 'ai'
+import OpenAI from 'openai'
 import { z } from 'zod'
 
 export type AIProvider = 'openai' | 'anthropic' | 'google'
@@ -22,67 +19,76 @@ export const AI_CONFIGS: Record<string, AIConfig> = {
     maxTokens: 4000
   },
   content: {
-    provider: 'anthropic',
-    model: 'claude-3-sonnet-20240229',
+    provider: 'openai',
+    model: 'gpt-4-turbo-preview',
     temperature: 0.7,
     maxTokens: 4000
   },
   analysis: {
-    provider: 'google',
-    model: 'gemini-pro',
+    provider: 'openai',
+    model: 'gpt-4-turbo-preview',
     temperature: 0.2,
     maxTokens: 2000
   }
 }
 
-// Get AI model based on provider and model name
-export function getAIModel(provider: AIProvider, model: string) {
-  switch (provider) {
-    case 'openai':
-      return openai(model)
-    case 'anthropic':
-      return anthropic(model)
-    case 'google':
-      return google(model)
-    default:
-      throw new Error(`Unsupported AI provider: ${provider}`)
-  }
-}
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+})
 
-// Generate text with AI
+// Generate text with AI (simplified version using OpenAI directly)
 export async function generateAIText(
   prompt: string,
   config: AIConfig = AI_CONFIGS.research
 ) {
-  const model = getAIModel(config.provider, config.model)
-  
-  const result = await generateText({
-    model,
-    prompt,
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OpenAI API key not configured')
+  }
+
+  const response = await openai.chat.completions.create({
+    model: config.model,
+    messages: [{ role: 'user', content: prompt }],
     temperature: config.temperature,
-    maxTokens: config.maxTokens
+    max_tokens: config.maxTokens,
   })
-  
-  return result.text
+
+  return response.choices[0]?.message?.content || ''
 }
 
-// Generate structured data with AI
+// Generate structured data with AI (simplified version)
 export async function generateAIObject<T>(
   prompt: string,
   schema: z.ZodSchema<T>,
   config: AIConfig = AI_CONFIGS.analysis
 ): Promise<T> {
-  const model = getAIModel(config.provider, config.model)
-  
-  const result = await generateObject({
-    model,
-    prompt,
-    schema,
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OpenAI API key not configured')
+  }
+
+  const structuredPrompt = `${prompt}
+
+Please respond with a valid JSON object that matches this schema:
+${JSON.stringify(schema.describe ? schema.describe() : 'object', null, 2)}
+
+Respond only with the JSON object, no additional text.`
+
+  const response = await openai.chat.completions.create({
+    model: config.model,
+    messages: [{ role: 'user', content: structuredPrompt }],
     temperature: config.temperature,
-    maxTokens: config.maxTokens
+    max_tokens: config.maxTokens,
   })
+
+  const content = response.choices[0]?.message?.content || '{}'
   
-  return result.object
+  try {
+    const parsed = JSON.parse(content)
+    return schema.parse(parsed)
+  } catch (error) {
+    console.error('Failed to parse AI response:', error)
+    throw new Error('Failed to generate structured data')
+  }
 }
 
 // Research-specific AI functions
