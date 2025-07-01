@@ -17,7 +17,6 @@ export interface FirecrawlScrapeOptions {
 }
 
 export interface FirecrawlSearchOptions {
-  query: string
   limit?: number
   format?: 'markdown' | 'html'
   includeTags?: string[]
