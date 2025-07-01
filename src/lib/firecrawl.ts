@@ -137,20 +137,20 @@ export async function crawlWebsite(
   }
 }
 
-// Helper function to extract structured data
-export async function extractData(
+// Helper function to extract structured data with Zod schema
+export async function extractData<T>(
   url: string,
-  schema: Record<string, any>
-): Promise<any> {
+  schema: any
+): Promise<T> {
   try {
     const result = await firecrawl.scrapeUrl(url, {
-      formats: ['extract'],
-      extract: {
-        schema: schema
+      formats: ['markdown'],
+      extractorOptions: {
+        extractionSchema: schema as any
       }
     })
     
-    return result.llm_extraction
+    return result.llm_extraction as T
   } catch (error) {
     console.error('Firecrawl extraction error:', error)
     throw new Error(`Failed to extract data: ${error}`)
