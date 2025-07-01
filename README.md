@@ -49,19 +49,27 @@ npm install
 
 ### 2. Environment Setup
 
-Copy `.env.example` to `.env.local` and fill in your API keys:
+Copy `.env.example` to `.env.local` and populate **all** required variables:
 
 ```env
 # Firecrawl API
 FIRECRAWL_API_KEY=your_firecrawl_key
 
-# AI Model APIs (choose your providers)
+# AI Model APIs
 OPENAI_API_KEY=your_openai_key
 ANTHROPIC_API_KEY=your_anthropic_key
 GOOGLE_API_KEY=your_google_key
+COHERE_API_KEY=your_cohere_key
+GROQ_API_KEY=your_groq_key
 
 # Vercel Postgres (auto-populated in production)
 POSTGRES_URL=your_postgres_url
+POSTGRES_PRISMA_URL=your_prisma_url
+POSTGRES_URL_NON_POOLING=your_non_pool_url
+POSTGRES_USER=your_pg_user
+POSTGRES_HOST=your_pg_host
+POSTGRES_PASSWORD=your_pg_password
+POSTGRES_DATABASE=your_pg_db
 
 # NextAuth.js
 NEXTAUTH_SECRET=your_secret_key
@@ -70,6 +78,17 @@ NEXTAUTH_URL=http://localhost:3000
 # OAuth Providers
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+DISCORD_CLIENT_ID=your_discord_client_id
+DISCORD_CLIENT_SECRET=your_discord_client_secret
+
+# Notifications
+SLACK_WEBHOOK_URL=your_slack_webhook_url
+DISCORD_WEBHOOK_URL=your_discord_webhook_url
+
+# Vercel (optional locally)
+VERCEL_URL=your_vercel_url
 ```
 
 ### 3. Database Setup
