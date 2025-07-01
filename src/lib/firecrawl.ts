@@ -137,7 +137,7 @@ export async function crawlWebsite(
   }
 }
 
-// Helper function to extract structured data with Zod schema
+// Helper function to extract structured data
 export async function extractData<T>(
   url: string,
   schema: any
@@ -145,8 +145,8 @@ export async function extractData<T>(
   try {
     const result = await firecrawl.scrapeUrl(url, {
       formats: ['markdown'],
-      extractorOptions: {
-        extractionSchema: schema as any
+      extract: {
+        schema: schema as any
       }
     })
     
