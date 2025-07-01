@@ -151,8 +151,8 @@ export async function extractData<T>(
     })
     
     // Check if result has data and llm_extraction
-    if ('data' in result && result.data && 'llm_extraction' in result.data) {
-      return result.data.llm_extraction as T
+    if ('data' in result && result.data && typeof result.data === 'object' && result.data !== null && 'llm_extraction' in result.data) {
+      return (result.data as any).llm_extraction as T
     }
     throw new Error('Extraction failed: llm_extraction not present')
   } catch (error) {
