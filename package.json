@@ -35,6 +35,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@vercel/blob": "^1.1.1",
+    "@aws-sdk/client-s3": "^3.651.1",
+    "cloudinary": "^2.5.0",
     "ai": "^3.4.32",
     "autoprefixer": "^10.4.19",
     "class-variance-authority": "^0.7.0",
